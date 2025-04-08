@@ -12,7 +12,7 @@
 	<artifactId>e-commerce</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>e-commerce</name>
-	<description>E-Commerce project for Spring Boot</description>
+	<description>E-commerce project powered by Spring Boot</description>
 	<url/>
 	<licenses>
 		<license/>
