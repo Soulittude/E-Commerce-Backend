@@ -1,5 +1,6 @@
 package com.soulittude.e_commerce.service;
 
+import com.soulittude.e_commerce.dto.RegisterRequest;
 import com.soulittude.e_commerce.entity.Role;
 import com.soulittude.e_commerce.entity.User;
 import com.soulittude.e_commerce.repository.UserRepository;
@@ -21,12 +22,12 @@ public class AuthService implements UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public ResponseEntity<?> registerUser(AuthController.RegisterRequest request) {
+    public ResponseEntity<?> registerUser(RegisterRequest request) {
         User user = new User();
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole(Role.USER); // Use the enum directly
+        user.setRole(Role.USER);
         userRepository.save(user);
         return ResponseEntity.ok(Map.of("message", "User registered successfully"));
     }
