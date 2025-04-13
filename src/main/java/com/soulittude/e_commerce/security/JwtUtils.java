@@ -1,8 +1,7 @@
 package com.soulittude.e_commerce.security;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,6 +10,7 @@ import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 @Component
 public class JwtUtils {
@@ -22,20 +22,22 @@ public class JwtUtils {
     private int expiration;
 
     public String generateToken(UserDetails userDetails) {
+        Map<String, Object> claims = new HashMap<>();
         return Jwts.builder()
-                .setSubject(userDetails.getUsername())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + expiration * 1000L))
-                .signWith(getSignKey(), SignatureAlgorithm.HS256)
+                .claims(claims)
+                .subject(userDetails.getUsername())
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + expiration * 1000L))
+                .signWith(getSignKey())
                 .compact();
     }
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parserBuilder()
-                .setSigningKey(getSignKey())
+            Jwts.parser()
+                .verifyWith(getSignKey())
                 .build()
-                .parseClaimsJws(token);
+                .parseSignedClaims(token);
             return true;
         } catch (Exception e) {
             return false;
@@ -43,16 +45,16 @@ public class JwtUtils {
     }
 
     public String getUsernameFromToken(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(getSignKey())
+        return Jwts.parser()
+                .verifyWith(getSignKey())
                 .build()
-                .parseClaimsJws(token)
-                .getBody()
+                .parseSignedClaims(token)
+                .getPayload()
                 .getSubject();
     }
 
     private Key getSignKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secret);
+        byte[] keyBytes = secret.getBytes(); // Use your Base64 secret here
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }
