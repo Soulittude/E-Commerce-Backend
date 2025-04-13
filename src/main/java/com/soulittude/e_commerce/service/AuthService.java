@@ -1,5 +1,6 @@
 package com.soulittude.e_commerce.service;
 
+import com.soulittude.e_commerce.entity.Role;
 import com.soulittude.e_commerce.entity.User;
 import com.soulittude.e_commerce.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +26,19 @@ public class AuthService implements UserDetailsService {
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole(Role.USER); // Default role
+        user.setRole(Role.USER); // Use the enum directly
         userRepository.save(user);
         return ResponseEntity.ok(Map.of("message", "User registered successfully"));
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username)
+        User user = userRepository.findByUsername(username)
             .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return org.springframework.security.core.userdetails.User
+            .withUsername(user.getUsername())
+            .password(user.getPassword())
+            .roles(user.getRole().name())
+            .build();
     }
 }

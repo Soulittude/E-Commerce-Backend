@@ -1,6 +1,7 @@
 package com.soulittude.e_commerce.security;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,11 +21,9 @@ public class JwtUtils {
     @Value("${jwt.expiration}")
     private int expiration;
 
-    // Generate JWT token
     public String generateToken(UserDetails userDetails) {
-        Map<String, Object> claims = new HashMap<>();
         return Jwts.builder()
-                .setClaims(claims)
+                .setClaims(new HashMap<>())
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration * 1000L))
@@ -32,7 +31,6 @@ public class JwtUtils {
                 .compact();
     }
 
-    // Validate JWT token
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()
@@ -45,7 +43,6 @@ public class JwtUtils {
         }
     }
 
-    // Extract username from token
     public String getUsernameFromToken(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(getSignKey())

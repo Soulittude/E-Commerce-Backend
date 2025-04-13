@@ -2,6 +2,7 @@ package com.soulittude.e_commerce.controller;
 
 import com.soulittude.e_commerce.security.JwtUtils;
 import com.soulittude.e_commerce.service.AuthService;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -40,17 +42,17 @@ public class AuthController {
         return ResponseEntity.ok(Map.of("token", token));
     }
 
-    // Inner classes for request objects
+    // Add getters/setters with Lombok
+    @Data
     static class RegisterRequest {
         private String username;
         private String email;
         private String password;
-        // Getters and setters
     }
 
+    @Data
     static class LoginRequest {
         private String username;
         private String password;
-        // Getters and setters
     }
 }
