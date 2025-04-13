@@ -23,7 +23,6 @@ public class JwtUtils {
 
     public String generateToken(UserDetails userDetails) {
         return Jwts.builder()
-                .setClaims(new HashMap<>())
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration * 1000L))
