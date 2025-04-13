@@ -28,5 +28,5 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-    private Category category; // Product categorization
+    private Category category; // Now references a valid @Entity
 }
