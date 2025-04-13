@@ -8,20 +8,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import java.util.Date;
-import java.util.HashMap;
 
 @Component
 public class JwtUtils {
 
     @Value("${jwt.secret}")
-    private String secret; // Should be a Base64-encoded string
+    private String secret;
 
     @Value("${jwt.expiration}")
     private int expiration;
 
     public String generateToken(UserDetails userDetails) {
         return Jwts.builder()
-                .claims(new HashMap<>()) // Add empty claims
                 .subject(userDetails.getUsername())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + expiration * 1000L))
@@ -50,9 +48,8 @@ public class JwtUtils {
                 .getSubject();
     }
 
-    // Return a SecretKey instead of Key
     private SecretKey getSignKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secret); // Decode Base64 secret
+        byte[] keyBytes = Decoders.BASE64.decode(secret); // Fix here
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }
