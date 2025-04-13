@@ -1,30 +1,27 @@
 package com.soulittude.e_commerce.security;
 
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import java.security.Key;
+import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
 
 @Component
 public class JwtUtils {
 
     @Value("${jwt.secret}")
-    private String secret;
+    private String secret; // Should be a Base64-encoded string
 
     @Value("${jwt.expiration}")
     private int expiration;
 
     public String generateToken(UserDetails userDetails) {
-        Map<String, Object> claims = new HashMap<>();
         return Jwts.builder()
-                .claims(claims)
+                .claims(new HashMap<>()) // Add empty claims
                 .subject(userDetails.getUsername())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + expiration * 1000L))
@@ -53,8 +50,9 @@ public class JwtUtils {
                 .getSubject();
     }
 
-    private Key getSignKey() {
-        byte[] keyBytes = secret.getBytes(); // Use your Base64 secret here
+    // Return a SecretKey instead of Key
+    private SecretKey getSignKey() {
+        byte[] keyBytes = Decoders.BASE64.decode(secret); // Decode Base64 secret
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }
