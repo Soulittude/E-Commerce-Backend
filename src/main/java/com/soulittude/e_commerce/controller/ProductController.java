@@ -3,6 +3,7 @@ package com.soulittude.e_commerce.controller;
 import com.soulittude.e_commerce.entity.Product;
 import com.soulittude.e_commerce.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,12 @@ public class ProductController {
     @GetMapping
     public List<Product> getAllProducts() {
         return productRepository.findAll();
+    }
+
+    @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public Product createProduct(@RequestBody Product product) {
+        return;
     }
 
 }

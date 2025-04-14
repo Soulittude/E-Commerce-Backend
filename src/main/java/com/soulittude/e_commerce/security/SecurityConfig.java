@@ -20,8 +20,9 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll() // Allow auth endpoints
-                .anyRequest().authenticated()
+            .requestMatchers("/api/auth/**").permitAll()
+            .requestMatchers("/api/products/**").authenticated() // Require auth
+            .anyRequest().hasRole("ADMIN")
             )
             .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
