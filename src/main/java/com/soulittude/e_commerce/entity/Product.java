@@ -1,7 +1,5 @@
 package com.soulittude.e_commerce.entity;
 
-import java.time.LocalDateTime;
-import java.util.Locale.Category;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -26,9 +24,5 @@ public class Product {
     private Double price;
     private String description;
 
-    private String sku; // Unique product identifier
-    private Integer stockQuantity; // Inventory tracking
-    private String imageUrl; // Product image
-    private LocalDateTime createdAt;
 
 }
