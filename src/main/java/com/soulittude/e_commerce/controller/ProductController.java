@@ -1,7 +1,8 @@
 package com.soulittude.e_commerce.controller;
 
 import com.soulittude.e_commerce.entity.Product;
-import com.soulittude.e_commerce.repository.ProductRepository;
+import com.soulittude.e_commerce.service.ProductService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -15,17 +16,17 @@ import java.util.List;
 public class ProductController {
 
     @Autowired
-    private ProductRepository productRepository;
+    private ProductService productService;
 
     @GetMapping
     public List<Product> getAllProducts() {
-        return productRepository.findAll();
+        return productService.getAllProducts();
     }
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public Product createProduct(@RequestBody Product product) {
-        return;
+        return productService.createProduct(product);
     }
 
 }
