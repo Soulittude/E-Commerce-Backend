@@ -22,7 +22,8 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
             .requestMatchers("/api/auth/**").permitAll()
             .requestMatchers("/api/products/**").authenticated() // Require auth
-            .anyRequest().hasRole("ADMIN")
+            .requestMatchers("/api/products/create").hasRole("ADMIN")
+            .anyRequest().authenticated()
             )
             .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
