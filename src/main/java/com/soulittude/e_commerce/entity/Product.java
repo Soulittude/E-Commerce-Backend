@@ -31,7 +31,4 @@ public class Product {
     private String imageUrl; // Product image
     private LocalDateTime createdAt;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category category; // Now references a valid @Entity
 }
