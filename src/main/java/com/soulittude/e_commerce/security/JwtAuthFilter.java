@@ -20,12 +20,10 @@ import java.io.IOException;
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private JwtUtils jwtUtils;
+    private final JwtUtils jwtUtils;
+    private final AuthService authService;
 
-    @Autowired
-    private AuthService authService; // Field injection instead of constructor
-
+    // Use constructor injection only (remove @Autowired)
     public JwtAuthFilter(JwtUtils jwtUtils, AuthService authService) {
         this.jwtUtils = jwtUtils;
         this.authService = authService;
