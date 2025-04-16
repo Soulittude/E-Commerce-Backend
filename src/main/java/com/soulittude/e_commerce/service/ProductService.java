@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.soulittude.e_commerce.entity.Product;
+import com.soulittude.e_commerce.exception.ProductNotFoundException;
 import com.soulittude.e_commerce.repository.ProductRepository;
 
 @Service
@@ -28,18 +29,18 @@ public class ProductService {
 
     public Product updateProduct(Long id, Product productDetails) {
         Product existingProduct = productRepo.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Product not found with id: " + id));
-        
+                .orElseThrow(() -> new ProductNotFoundException(id));
+
         existingProduct.setName(productDetails.getName());
         existingProduct.setDescription(productDetails.getDescription());
         existingProduct.setPrice(productDetails.getPrice());
-        
+
         return productRepo.save(existingProduct);
     }
 
     public void deleteProduct(Long id) {
         Product product = productRepo.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Product not found with id: " + id));
+                .orElseThrow(() -> new ProductNotFoundException(id));
         productRepo.delete(product);
     }
 }
