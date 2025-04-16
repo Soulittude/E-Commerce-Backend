@@ -1,6 +1,5 @@
 package com.soulittude.e_commerce.entity;
 
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
@@ -23,6 +22,5 @@ public class Product {
     @Positive(message = "Price must be positive")
     private Double price;
     private String description;
-
 
 }

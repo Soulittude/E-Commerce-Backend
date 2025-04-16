@@ -1,5 +1,4 @@
 package com.soulittude.e_commerce.service;
-import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,10 +20,26 @@ public class ProductService {
     }
 
     public Product createProduct(Product product) {
-        // Simple validation
         if (product.getPrice() <= 0) {
             throw new IllegalArgumentException("Price must be positive");
         }
         return productRepo.save(product);
+    }
+
+    public Product updateProduct(Long id, Product productDetails) {
+        Product existingProduct = productRepo.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Product not found with id: " + id));
+        
+        existingProduct.setName(productDetails.getName());
+        existingProduct.setDescription(productDetails.getDescription());
+        existingProduct.setPrice(productDetails.getPrice());
+        
+        return productRepo.save(existingProduct);
+    }
+
+    public void deleteProduct(Long id) {
+        Product product = productRepo.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Product not found with id: " + id));
+        productRepo.delete(product);
     }
 }
