@@ -1,6 +1,8 @@
 package com.soulittude.e_commerce.service;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.soulittude.e_commerce.entity.Product;
@@ -14,8 +16,8 @@ public class ProductService {
         this.productRepo = productRepo;
     }
 
-    public List<Product> getAllProducts() {
-        return productRepo.findAll();
+    public Page<Product> getAllProducts(Pageable pageable) {
+        return productRepo.findAll(pageable);
     }
 
     public Product createProduct(Product product) {
