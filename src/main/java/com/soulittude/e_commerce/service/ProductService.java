@@ -43,4 +43,8 @@ public class ProductService {
                 .orElseThrow(() -> new ProductNotFoundException(id));
         productRepo.delete(product);
     }
+
+    public Page<Product> searchProducts(String name, Double minPrice, Double maxPrice, Pageable pageable) {
+        return productRepo.searchProducts(name, minPrice, maxPrice, pageable);
+    }
 }

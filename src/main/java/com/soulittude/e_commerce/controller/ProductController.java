@@ -18,9 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class ProductController {
 
     @Autowired
-    private ProductService productService;
-
-    private ProductRepository productRepository;
+    private ProductService productService; // Only inject the service
 
     @GetMapping
     public Page<Product> getAllProducts(
@@ -56,6 +54,6 @@ public class ProductController {
             @RequestParam(required = false) Double maxPrice,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        return productRepository.searchProducts(name, minPrice, maxPrice, PageRequest.of(page, size));
+        return productService.searchProducts(name, minPrice, maxPrice, PageRequest.of(page, size));
     }
 }
