@@ -1,6 +1,7 @@
 package com.soulittude.e_commerce.controller;
 
 import com.soulittude.e_commerce.entity.Product;
+import com.soulittude.e_commerce.repository.ProductRepository;
 import com.soulittude.e_commerce.service.ProductService;
 
 import jakarta.validation.Valid;
@@ -18,6 +19,8 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
+
+    private ProductRepository productRepository;
 
     @GetMapping
     public Page<Product> getAllProducts(
@@ -44,5 +47,15 @@ public class ProductController {
     @PreAuthorize("hasRole('ADMIN')")
     public void deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
+    }
+
+    @GetMapping("/search")
+    public Page<Product> searchProducts(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Double minPrice,
+            @RequestParam(required = false) Double maxPrice,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return productRepository.searchProducts(name, minPrice, maxPrice, PageRequest.of(page, size));
     }
 }
