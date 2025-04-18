@@ -9,12 +9,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    Page<Product> findAll(Pageable pageable);
 
     @Query("SELECT p FROM Product p WHERE " +
-            "(:name IS NULL OR p.name LIKE %:name%) AND " +
-            "(:minPrice IS NULL OR p.price >= :minPrice) AND " +
-            "(:maxPrice IS NULL OR p.price <= :maxPrice)")
+            "(LOWER(p.name) LIKE LOWER(CONCAT('%', :name, '%')) OR :name IS NULL) AND " +
+            "(p.price >= :minPrice OR :minPrice IS NULL) AND " +
+            "(p.price <= :maxPrice OR :maxPrice IS NULL)")
     Page<Product> searchProducts(
             @Param("name") String name,
             @Param("minPrice") Double minPrice,
