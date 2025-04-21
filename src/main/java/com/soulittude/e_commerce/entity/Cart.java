@@ -30,8 +30,9 @@ public class Cart {
     @PreUpdate
     public void calculateTotal() {
         this.totalPrice = items.stream()
-                .map(item -> item.getProduct().getPrice()
-                        .multiply(BigDecimal.valueOf(item.getQuantity())))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+            .map(item -> 
+                BigDecimal.valueOf(item.getProduct().getPrice()) // Convert Double to BigDecimal
+                .multiply(BigDecimal.valueOf(item.getQuantity()))
+            .reduce(BigDecimal.ZERO, BigDecimal::add));
     }
 }
