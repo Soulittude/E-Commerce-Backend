@@ -1,5 +1,7 @@
 package com.soulittude.e_commerce.entity;
 
+import java.util.List;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,19 +13,25 @@ import lombok.NoArgsConstructor;
 @Setter
 @NoArgsConstructor
 public class UserEntity {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @Column(unique = true)
     private String username;
-    
+
     @Column(unique = true)
     private String email;
-    
+
     private String password;
-    
+
     @Enumerated(EnumType.STRING)
-    private Role role; // Use the enum directly
+    private Role role;
+
+    @OneToOne(mappedBy = "user")
+    private Cart cart;
+
+    @OneToMany(mappedBy = "user")
+    private List<OrderEntity> orders;
 }

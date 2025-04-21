@@ -6,8 +6,8 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Table(name = "orders", indexes = @Index(columnList = "user_id, status"))
 @Entity
-@Table(name = "orders")
 @Getter
 @Setter
 public class OrderEntity {
@@ -22,5 +22,12 @@ public class OrderEntity {
     private List<OrderItem> items;
 
     private LocalDateTime orderDate;
-    private String status; // e.g., "PENDING", "COMPLETED"
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status = OrderStatus.PENDING;
+
+    @PrePersist
+    protected void onCreate() {
+        orderDate = LocalDateTime.now();
+    }
+
 }
