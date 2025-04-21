@@ -1,5 +1,5 @@
 package com.soulittude.e_commerce.repository;
 
-public class OrderItem {
+public class OrderItemRepository {
     
 }
