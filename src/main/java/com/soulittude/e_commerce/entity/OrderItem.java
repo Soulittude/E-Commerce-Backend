@@ -1,11 +1,12 @@
 package com.soulittude.e_commerce.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
 public class OrderItem {
     @Id
     @GeneratedValue
@@ -17,5 +18,6 @@ public class OrderItem {
     private int quantity;
 
     @ManyToOne
+    @JoinColumn(name = "order_id")
     private OrderEntity order;
 }
