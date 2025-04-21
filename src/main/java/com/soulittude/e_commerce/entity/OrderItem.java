@@ -17,5 +17,5 @@ public class OrderItem {
     private int quantity;
 
     @ManyToOne
-    private Order order;
+    private OrderEntity order;
 }

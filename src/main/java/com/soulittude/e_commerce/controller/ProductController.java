@@ -1,7 +1,6 @@
 package com.soulittude.e_commerce.controller;
 
 import com.soulittude.e_commerce.entity.Product;
-import com.soulittude.e_commerce.repository.ProductRepository;
 import com.soulittude.e_commerce.service.ProductService;
 
 import jakarta.validation.Valid;

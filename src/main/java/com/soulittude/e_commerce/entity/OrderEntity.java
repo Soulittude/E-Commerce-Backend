@@ -11,13 +11,13 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
 @Entity
-public class Order {
+public class OrderEntity {
     @Id
     @GeneratedValue
     private Long id;
 
     @ManyToOne
-    private User user;
+    private UserEntity user;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> items;

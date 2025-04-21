@@ -17,7 +17,7 @@ public class Cart {
     private Long id;
     
     @OneToOne
-    private User user;
+    private UserEntity user;
     
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
     private List<CartItem> items;

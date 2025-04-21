@@ -2,7 +2,7 @@ package com.soulittude.e_commerce.service;
 
 import com.soulittude.e_commerce.dto.RegisterRequest;
 import com.soulittude.e_commerce.entity.Role;
-import com.soulittude.e_commerce.entity.User;
+import com.soulittude.e_commerce.entity.UserEntity;
 import com.soulittude.e_commerce.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +23,7 @@ public class AuthService implements UserDetailsService {
     private PasswordEncoder passwordEncoder;
 
     public ResponseEntity<?> registerUser(RegisterRequest request) {
-        User user = new User();
+        UserEntity user = new UserEntity();
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -34,7 +34,7 @@ public class AuthService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username)
+        UserEntity user = userRepository.findByUsername(username)
             .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         return org.springframework.security.core.userdetails.User
             .withUsername(user.getUsername())
