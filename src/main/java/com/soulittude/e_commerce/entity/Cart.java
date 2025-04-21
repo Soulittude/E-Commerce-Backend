@@ -13,15 +13,15 @@ import lombok.Setter;
 @Setter
 public class Cart {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Better for most DBs
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "user_id", unique = true) // Ensure 1:1 relationship
+    @JoinColumn(name = "user_id", unique = true)
     private UserEntity user;
 
-    @Column(precision = 10, scale = 2) // Control decimal format
-    private BigDecimal totalPrice = BigDecimal.ZERO; // Initialize
+    @Column(precision = 10, scale = 2)
+    private BigDecimal totalPrice = BigDecimal.ZERO;
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartItem> items = new ArrayList<>();
@@ -31,8 +31,8 @@ public class Cart {
     public void calculateTotal() {
         this.totalPrice = items.stream()
             .map(item -> 
-                BigDecimal.valueOf(item.getProduct().getPrice()) // Convert Double to BigDecimal
-                .multiply(BigDecimal.valueOf(item.getQuantity()))
-            .reduce(BigDecimal.ZERO, BigDecimal::add));
+                BigDecimal.valueOf(item.getProduct().getPrice())
+                .multiply(BigDecimal.valueOf(item.getQuantity())))
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }
