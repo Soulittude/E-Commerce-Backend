@@ -20,7 +20,7 @@ public class Cart {
     @JoinColumn(name = "user_id", unique = true)
     private UserEntity user;
 
-    @Column(precision = 10, scale = 2)
+    @Column(name = "total_price", precision = 10, scale = 2)
     private BigDecimal totalPrice = BigDecimal.ZERO;
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -30,9 +30,8 @@ public class Cart {
     @PreUpdate
     public void calculateTotal() {
         this.totalPrice = items.stream()
-            .map(item -> 
-                BigDecimal.valueOf(item.getProduct().getPrice())
-                .multiply(BigDecimal.valueOf(item.getQuantity())))
-            .reduce(BigDecimal.ZERO, BigDecimal::add);
+                .map(item -> BigDecimal.valueOf(item.getProduct().getPrice())
+                        .multiply(BigDecimal.valueOf(item.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }
