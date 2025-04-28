@@ -65,4 +65,8 @@ public class CartService {
     public Cart getCart(UserEntity user) {
         return getOrCreateCart(user);
     }
+
+    public void saveCart(Cart cart) {
+        cartRepository.save(cart);
+    }
 }

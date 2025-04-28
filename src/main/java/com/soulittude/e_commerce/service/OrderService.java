@@ -22,7 +22,6 @@ import lombok.RequiredArgsConstructor;
 public class OrderService {
     private final OrderRepository orderRepository;
     private final CartService cartService;
-    private final UserRepository userRepository;
 
     public OrderEntity placeOrder(UserEntity user) {
         Cart cart = cartService.getCart(user);
@@ -50,5 +49,9 @@ public class OrderService {
         cartService.saveCart(cart);
 
         return order;
+    }
+
+    public List<OrderEntity> getUserOrders(UserEntity user) {
+        return orderRepository.findByUser(user);
     }
 }
