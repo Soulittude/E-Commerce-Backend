@@ -1,5 +1,6 @@
 package com.soulittude.e_commerce.security;
 
+import com.soulittude.e_commerce.repository.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -9,15 +10,12 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import com.soulittude.e_commerce.repository.UserRepository;
 
 @Configuration
 @EnableWebSecurity
@@ -29,11 +27,10 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, "/api/cart/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/cart").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/orders").authenticated()
-                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
                         .requestMatchers("/api/products/**").authenticated()
+                        .requestMatchers("/api/cart/**").authenticated()
+                        .requestMatchers("/api/orders/**").authenticated()
                         .anyRequest().authenticated())
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
@@ -55,7 +52,6 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService(UserRepository userRepository) {
         return username -> userRepository.findByUsername(username)
-                .map(user -> (UserDetails) user) // Now safe since UserEntity implements UserDetails
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 }
