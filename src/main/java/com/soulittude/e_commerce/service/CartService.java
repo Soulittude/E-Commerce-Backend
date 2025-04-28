@@ -12,20 +12,15 @@ import com.soulittude.e_commerce.repository.CartRepository;
 import com.soulittude.e_commerce.repository.ProductRepository;
 
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 @Transactional
 public class CartService {
     private final CartRepository cartRepository;
     private final ProductRepository productRepository;
     private final CartItemRepository cartItemRepository;
-
-    public CartService(CartRepository cartRepository, ProductRepository productRepository,
-            CartItemRepository cartItemRepository) {
-        this.cartRepository = cartRepository;
-        this.productRepository = productRepository;
-        this.cartItemRepository = cartItemRepository;
-    }
 
     public Cart getOrCreateCart(UserEntity user) {
         return cartRepository.findByUser(user)
@@ -42,20 +37,19 @@ public class CartService {
 
         Cart cart = getOrCreateCart(user);
 
-        CartItem existingItem = cart.getItems().stream()
+        // Update existing item or add new
+        cart.getItems().stream()
                 .filter(item -> item.getProduct().getId().equals(productId))
                 .findFirst()
-                .orElse(null);
-
-        if (existingItem != null) {
-            existingItem.setQuantity(existingItem.getQuantity() + quantity);
-        } else {
-            CartItem newItem = new CartItem();
-            newItem.setProduct(product);
-            newItem.setQuantity(quantity);
-            newItem.setCart(cart);
-            cart.getItems().add(newItem);
-        }
+                .ifPresentOrElse(
+                        item -> item.setQuantity(item.getQuantity() + quantity),
+                        () -> {
+                            CartItem newItem = new CartItem();
+                            newItem.setProduct(product);
+                            newItem.setQuantity(quantity);
+                            newItem.setCart(cart);
+                            cartItemRepository.save(newItem);
+                        });
 
         cart.calculateTotal();
         cartRepository.save(cart);
@@ -66,5 +60,9 @@ public class CartService {
         cart.getItems().removeIf(item -> item.getId().equals(itemId));
         cart.calculateTotal();
         cartRepository.save(cart);
+    }
+
+    public Cart getCart(UserEntity user) {
+        return getOrCreateCart(user);
     }
 }
