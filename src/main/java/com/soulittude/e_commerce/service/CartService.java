@@ -1,5 +1,7 @@
 package com.soulittude.e_commerce.service;
 
+import java.math.BigDecimal;
+
 import org.springframework.stereotype.Service;
 
 import com.soulittude.e_commerce.entity.Cart;
@@ -27,6 +29,7 @@ public class CartService {
                 .orElseGet(() -> {
                     Cart newCart = new Cart();
                     newCart.setUser(user);
+                    newCart.setTotalPrice(BigDecimal.ZERO);
                     return cartRepository.save(newCart);
                 });
     }
