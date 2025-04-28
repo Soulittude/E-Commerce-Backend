@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.soulittude.e_commerce.dto.CartRequestDTO;
 import com.soulittude.e_commerce.entity.Cart;
 import com.soulittude.e_commerce.entity.UserEntity;
+import com.soulittude.e_commerce.repository.UserRepository;
 import com.soulittude.e_commerce.service.CartService;
 
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CartController {
     private final CartService cartService;
+    private final UserRepository userRepository;
 
     @PostMapping("/add")
     public ResponseEntity<Cart> addToCart(@RequestBody CartRequestDTO request,
@@ -29,12 +31,14 @@ public class CartController {
         UserEntity user = userRepository.findByUsername(userDetails.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        cartService.addToCart(request.productId(), request.quantity(), user);
+        cartService.addToCart(request.getProductId(), request.getQuantity(), user);
         return ResponseEntity.ok(cartService.getCart(user));
     }
 
     @GetMapping
-    public ResponseEntity<Cart> getCart(@AuthenticationPrincipal UserEntity user) {
+    public ResponseEntity<Cart> getCart(@AuthenticationPrincipal UserDetails userDetails) {
+        UserEntity user = userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         return ResponseEntity.ok(cartService.getCart(user));
     }
 }
