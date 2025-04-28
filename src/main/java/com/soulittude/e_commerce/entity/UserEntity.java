@@ -2,6 +2,8 @@ package com.soulittude.e_commerce.entity;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,6 +32,7 @@ public class UserEntity {
     private Role role;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonBackReference
     private Cart cart;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
