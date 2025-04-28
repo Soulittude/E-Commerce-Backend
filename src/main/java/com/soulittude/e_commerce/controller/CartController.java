@@ -2,6 +2,8 @@ package com.soulittude.e_commerce.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,10 +24,12 @@ public class CartController {
     private final CartService cartService;
 
     @PostMapping("/add")
-    public ResponseEntity<Cart> addToCart(
-            @RequestBody CartRequestDTO request,
-            @AuthenticationPrincipal UserEntity user) {
-        cartService.addToCart(request.getProductId(), request.getQuantity(), user);
+    public ResponseEntity<Cart> addToCart(@RequestBody CartRequestDTO request,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        UserEntity user = userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        cartService.addToCart(request.productId(), request.quantity(), user);
         return ResponseEntity.ok(cartService.getCart(user));
     }
 

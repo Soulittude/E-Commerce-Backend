@@ -36,5 +36,6 @@ public class UserEntity {
     private Cart cart;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
+    @JsonBackReference
     private List<OrderEntity> orders;
 }

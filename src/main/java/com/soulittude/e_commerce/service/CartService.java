@@ -1,6 +1,7 @@
 package com.soulittude.e_commerce.service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 
 import org.springframework.stereotype.Service;
 
@@ -30,6 +31,7 @@ public class CartService {
                     Cart newCart = new Cart();
                     newCart.setUser(user);
                     newCart.setTotalPrice(BigDecimal.ZERO);
+                    newCart.setItems(new ArrayList<>());
                     return cartRepository.save(newCart);
                 });
     }
@@ -40,7 +42,6 @@ public class CartService {
 
         Cart cart = getOrCreateCart(user);
 
-        // Update existing item or add new
         cart.getItems().stream()
                 .filter(item -> item.getProduct().getId().equals(productId))
                 .findFirst()
