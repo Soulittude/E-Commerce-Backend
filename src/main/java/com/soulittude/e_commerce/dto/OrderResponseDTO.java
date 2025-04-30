@@ -5,11 +5,9 @@ import java.util.List;
 
 import com.soulittude.e_commerce.entity.OrderStatus;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class OrderResponseDTO {
     private Long id;
     private Long userId;
