@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.soulittude.e_commerce.dto.OrderResponseDTO;
 import com.soulittude.e_commerce.entity.Cart;
 import com.soulittude.e_commerce.entity.OrderEntity;
 import com.soulittude.e_commerce.entity.OrderItem;
@@ -23,7 +24,9 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final CartService cartService;
 
-    public OrderEntity placeOrder(UserEntity user) {
+    public OrderResponseDTO
+    public OrderResponseDTO
+    public OrderResponseDTO placeOrder(UserEntity user) {
         Cart cart = cartService.getCart(user);
 
         OrderEntity order = new OrderEntity();

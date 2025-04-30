@@ -3,13 +3,13 @@ package com.soulittude.e_commerce.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 public class Product {
     @Id

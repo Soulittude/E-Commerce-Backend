@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.soulittude.e_commerce.dto.OrderResponseDTO;
 import com.soulittude.e_commerce.entity.OrderEntity;
 import com.soulittude.e_commerce.entity.UserEntity;
 import com.soulittude.e_commerce.service.OrderService;
@@ -22,14 +23,17 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<OrderEntity> placeOrder(
+    public ResponseEntity<OrderResponseDTO> placeOrder(
             @AuthenticationPrincipal UserEntity user) {
-        return ResponseEntity.ok(orderService.placeOrder(user));
+        OrderResponseDTO orderDTO = orderService.placeOrder(user);
+        return ResponseEntity.ok(orderDTO);
     }
 
     @GetMapping
-    public ResponseEntity<List<OrderEntity>> getOrders(
+    public ResponseEntity<List<OrderResponseDTO>> getOrders(
             @AuthenticationPrincipal UserEntity user) {
-        return ResponseEntity.ok(orderService.getUserOrders(user));
+        List<OrderResponseDTO> orders = orderService.getUserOrders(user);
+        return ResponseEntity.ok(orders);
     }
+
 }
